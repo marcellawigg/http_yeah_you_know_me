@@ -1,4 +1,4 @@
-require './lib/server'
+gitrequire './lib/server'
 require 'minitest/autorun'
 require 'minitest/pride'
 
