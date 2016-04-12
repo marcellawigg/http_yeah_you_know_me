@@ -1,0 +1,25 @@
+{
+  "Unit Tests": {
+    "coverage": {
+      "/Users/hollagonzalla/http_yeah_you_know_me/lib/response.rb": [
+        1,
+        1,
+        null,
+        1,
+        null,
+        null,
+        null,
+        1,
+        11,
+        null,
+        null,
+        1,
+        1,
+        null,
+        null,
+        null
+      ]
+    },
+    "timestamp": 1460501300
+  }
+}

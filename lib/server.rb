@@ -2,8 +2,7 @@ require 'socket'
 require 'pry'
 
 class Server
-  attr_reader :server
-  include Something
+  attr_accessor :server
 
   def initialize
     @counter = 0
@@ -13,18 +12,15 @@ class Server
   def start
     puts "Ready for a request"
     loop do
+      # require "pry"; binding.pry
       client = server.accept
 
       request_lines = get_lines(client)
-      response =        "<pre>
-            Verb: POST
-            Path: /
-            Protocol: HTTP/1.1
-            Host: 127.0.0.1
-            Port: 9292
-            Origin: 127.0.0.1
-            Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
-            </pre>"
+      require "pry"; binding.pry
+      response = request_lines.join("\n")
+
+
+
 
       output = "<html><head></head><body>Hello World! (#{@counter})\n#{response}</body></html>"
       headers = ["http/1.1 200 ok",
@@ -39,7 +35,6 @@ class Server
 
       @counter += 1 unless request_lines[0].include?("favicon")
         client.close
-        ELise::this_and_that
       end
     end
 
@@ -57,24 +52,5 @@ end
 if __FILE__ == $0
   s = Server.new
   s.start
-end
-
-
-
-
-
-module Something
-  def self.this_and_that
-    puts "woooo"
-  end
-
-  def pizza
-    puts "lolol"
-  end
-end
-
-module Elise
-  def self.this_and_that
-
-  end
+  # s.get_lines
 end
