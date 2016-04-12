@@ -2,16 +2,79 @@ require 'socket'
 require 'pry'
 
 class Server
-  attr_reader :port
+  attr_reader :server
+  include Something
 
   def initialize
-    # @tcp_server = TCPServer.new 'test, 9292
+    @counter = 0
+    @server = TCPServer.new(9292)
   end
 
-  def tcp_server(port=9292)
-    TCPServer.new port
-    port
+  def start
+    puts "Ready for a request"
+    loop do
+      client = server.accept
+
+      request_lines = get_lines(client)
+      response =        "<pre>
+            Verb: POST
+            Path: /
+            Protocol: HTTP/1.1
+            Host: 127.0.0.1
+            Port: 9292
+            Origin: 127.0.0.1
+            Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+            </pre>"
+
+      output = "<html><head></head><body>Hello World! (#{@counter})\n#{response}</body></html>"
+      headers = ["http/1.1 200 ok",
+        "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+        "server: ruby",
+        "content-type: text/html; charset=iso-8859-1",
+        "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+
+      client.puts headers
+
+      client.puts output
+
+      @counter += 1 unless request_lines[0].include?("favicon")
+        client.close
+        ELise::this_and_that
+      end
+    end
+
+  def get_lines(client)
+    request_lines = []
+    while line = client.gets and !line.chomp.empty?
+      request_lines << line.chomp
+    end
+    request_lines
   end
 
+end
 
+
+if __FILE__ == $0
+  s = Server.new
+  s.start
+end
+
+
+
+
+
+module Something
+  def self.this_and_that
+    puts "woooo"
+  end
+
+  def pizza
+    puts "lolol"
+  end
+end
+
+module Elise
+  def self.this_and_that
+
+  end
 end
