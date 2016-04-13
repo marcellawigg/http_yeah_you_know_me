@@ -34,6 +34,11 @@ module Response
     hash
   end
 
+  def send_to_output(path)
+    path = request_lines[0].split(" ")[1]
+    output = Output.new(path)
+  end
+
   def delete_first_item(request_lines)
     request_lines.delete_at(0)
     request_lines
