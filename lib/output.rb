@@ -1,56 +1,42 @@
+require './lib/response_parser'
 class Output
+  attr_reader :path, :hello_counter, :response, :ps
 
-  def initialize(path)
-    @path = path
+  def initialize(response, ps)
+    @path = response.path
+    @response = response
+    @ps = ps
   end
 
-  def path_outputs(path)
+  def path_outputs
+    ps.request_counter += 1
     case path
-    when root?
+    when "/"
       output_root
-    when hello?
+    when "/hello"
+      ps.hello_counter += 1
       output_hello
-    when date?
+    when "/datetime"
       output_datetime
-    when shutdown?
+    when "/shutdown"
+      ps.close = true
       output_shutdown
     end
-
-    output_hello = "<html><head></head><body>Hello World! (#{@counter})</body></html>"
-    output_root = "<html><head></head><body><p><pre>#{response.response}</pre></p></body></html>"
-    output_datetime = "<html><head></head><body><p><pre>Time.now.strftime("%H:%M%p on %A, %B %d, %Y")</pre></p></body></html>"
-    output_shutdown = "<html><head></head><body><p><pre>Total Requests: #{@line_counter} </pre></p></body></html>"
-
   end
 
-  def root?
-    true if @path == "/"
+  def output_hello
+    "<html><head></head><body>Hello World! (#{ps.hello_counter})</body></html>"
   end
 
-  def hello?
-    true if @path == "/hello"
+  def output_root
+    "<html><head></head><body><p><pre>#{response.string_output}</pre></p></body></html>"
   end
 
-  def date?
-    true if @path == "/datetime"
+  def output_datetime
+    "<html><head></head><body><p><pre>#{Time.now.strftime("%l:%M%p on %A, %B %d, %Y")}</pre></p></body></html>"
   end
 
-  def shutdown?
-    true if @path == "/shutdown"
+  def output_shutdown
+    "<html><head></head><body><p><pre>Total Requests: #{ps.request_counter} </pre></p></body></html>"
   end
-
-  # def output_hello
-  #   "<html><head></head><body>Hello World! (#{@counter})</body></html>"
-  # end
-  #
-  # def output_root     "<html><head></head><body><p><pre>#{response.response}</pre></p></body></html>"
-  # end
-  #
-  # # def output_datetime
-  # #   "<html><head></head><body>"Time.now.strftime("%H:%M%p on %A, %B %d, %Y")"</body></html>"
-  # # end
-  # #
-  # def output_shutdown
-  #   "<html><head></head><body><p><pre>Total Requests: #{@line_counter} </pre></p></body></html>"
-  # end
 end
