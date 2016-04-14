@@ -8,8 +8,6 @@ class Server
   attr_accessor :server
 
   def initialize
-    # @line_counter = 0
-    # @hello_counter = 0
     @ps = PersistentState.new
     @server = TCPServer.new(9292)
   end
@@ -28,12 +26,13 @@ class Server
       #   "server: ruby",
       #   "content-type: text/html; charset=iso-8859-1",
       #   "content-length: #{output.length}\r\n\r\n"].join("\r\n")
-
+      #
       # client.puts headers
       client.puts output_object.path_outputs
-      return client.close if @ps.close
-      end
+      client.close
+      break if @ps.close
     end
+  end
 
   def get_lines(client)
     request_lines = []
@@ -49,5 +48,4 @@ end
 if __FILE__ == $0
   s = Server.new
   s.start
-  # s.get_lines
 end
