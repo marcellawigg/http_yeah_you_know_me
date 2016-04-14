@@ -7,10 +7,9 @@ require './lib/output'
 
 class OutputTest < Minitest::Test
 
-  def test_it_outputs_root
-    @path = "/"
-    assert_equal output_root,path_outputs(@path)
+  def test_it_isolates_path
+    
   end
 
-  
+
 end
