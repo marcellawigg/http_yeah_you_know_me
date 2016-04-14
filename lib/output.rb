@@ -21,6 +21,8 @@ class Output
     when "/shutdown"
       ps.close = true
       output_shutdown
+    when "/word_search"
+      
     end
   end
 
