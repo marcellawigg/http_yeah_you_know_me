@@ -20,15 +20,16 @@ class Server
       request_lines = get_lines(client)
       response = ResponseParser.new(request_lines)
       output_object = Output.new(response, @ps)
+      output = output_object.path_outputs
 
-      # headers = ["http/1.1 200 ok",
-      #   "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-      #   "server: ruby",
-      #   "content-type: text/html; charset=iso-8859-1",
-      #   "content-length: #{output.length}\r\n\r\n"].join("\r\n")
-      #
-      # client.puts headers
-      client.puts output_object.path_outputs
+      headers = ["http/1.1 200 ok",
+        "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+        "server: ruby",
+        "content-type: text/html; charset=iso-8859-1",
+        "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+
+      client.puts headers
+      client.puts output
       client.close
       break if @ps.close
     end

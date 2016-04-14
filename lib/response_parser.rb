@@ -2,13 +2,12 @@
     attr_reader :request_lines
 
     def initialize(request_lines)
-      # @output_hash = output_hash(request_lines)
       @request_lines = request_lines
     end
 
     def string_output
       hash1 = first_three_hashes
-      hash2 = header
+      hash2 = hash_without_first
       output_hash = hash1.merge(hash2)
 
       output_string = output_hash.map do |key,value|
@@ -28,7 +27,7 @@
       hash
     end
 
-    def header
+    def hash_without_first
       lines = request_lines.drop(1)
 
       lines_split = lines.map { |line| line.split(": ") }
@@ -37,7 +36,7 @@
 
     def output_hash
       hash1 = first_three_hashes
-      hash2 = header
+      hash2 = hash_without_first
       hash1.merge(hash2)
     end
 
