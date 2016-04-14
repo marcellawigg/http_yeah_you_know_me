@@ -31,8 +31,7 @@ class Server
 
       # client.puts headers
       client.puts output_object.path_outputs
-      @hello_counter +=
-      client.close if @ps.close
+      return client.close if @ps.close
       end
     end
 
