@@ -10,7 +10,6 @@ module NumberSearch
   end
 
   def number_comparison
-    # require "pry"; binding.pry
     if check_class
       if ps.guess > ps.random_number
         "Guess: #{ps.guess}\nYour guess was too high."

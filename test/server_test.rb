@@ -7,23 +7,13 @@ require 'pry'
 class ServerTest < Minitest::Test
   attr_reader :conn
   def setup
-    @conn = Faraday.new(:url => 'http://sushi.com') do |faraday|
-      faraday.request  :url_encoded             # form-encode POST params
-      faraday.response :logger                  # log requests to STDOUT
-      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-    end
+    @conn = Faraday.new(:url => 'http://localhost:9292')
   end
 
-    # def test_it_listens_on_default_port
-    #   assert_equal 9292, Server.new.tcp_server
-    # end
-
-    def test_it_returns_response
-      @server = Server.new
-      @server.tcp_server
-      response = @conn.get "http://localhost:9292"
-      binding.pry
-    end
-
-
+  def test_it_returns_response
+    assert @conn
+    assert @conn.get '/start_game'
+      # req.body = "<html><head></head><body>Hello World! (#{ps.hello_counter})</body></html>"
   end
+
+end

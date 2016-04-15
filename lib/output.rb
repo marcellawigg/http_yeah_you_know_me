@@ -36,14 +36,10 @@ class Output
     when path == "/start_game"
       ps.game = true
       output_game_start
-    when path == "/game" && verb == "GET" && ps.game == true
+    when path == "/game" && verb == "POST"
+      game_post
+    when path == "/game" && verb == "GET"
       number_comparison
-    when path == "/game" && verb == "POST" && ps.game == true
-      ps.header = ["HTTP/1.1 303 See Other",
-          "Location: http://127.0.0.1:9292/game",
-          "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-          "server: ruby",
-          "content-type: text/html; charset=iso-8859-1"].join("\r\n")
     end
   end
 
@@ -76,6 +72,12 @@ class Output
 
   def output_game
     "<html><head></head><body>You have taken #{ps.guess_count} guesses</body></hmtl>"
+  end
+
+  def game_post
+    server = "HTTP/1.1 303 See Other\r\n"
+    location = "Location: http://127.0.0.1:9292/game\r\n\r\n"
+     server + location
   end
 
 end

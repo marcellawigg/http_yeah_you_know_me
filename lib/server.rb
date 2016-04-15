@@ -5,7 +5,6 @@ require './lib/response_parser'
 require './lib/persistent_state'
 
 class Server
-  # include NumberSearch
   attr_accessor :server
 
   def initialize
@@ -33,7 +32,7 @@ class Server
       client.puts @ps.header
       client.puts output
 
-
+      client.close
       break if @ps.close
 
     end
