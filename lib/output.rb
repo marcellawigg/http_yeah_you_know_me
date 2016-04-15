@@ -2,6 +2,7 @@ require './lib/response_parser'
 require './lib/word_search'
 require './lib/response_codes'
 require './lib/number_search'
+require './lib/server'
 
 class Output
   include WordSearch
@@ -18,28 +19,36 @@ class Output
     @dictionary ||= File.read("/usr/share/dict/words")
   end
 
-  def path_outputs
+  def path_outputs(client)
     ps.request_counter += 1
     case
     when path == "/"
+      run_code(client)
       output_root
     when path == "/hello"
       ps.hello_counter += 1
+      run_code(client)
       output_hello
     when path == "/datetime"
+      run_code(client)
       output_datetime
     when path == "/shutdown"
+      run_code(client)
       ps.close = true
       output_shutdown
     when path.include?("word_search")
+      run_code(client)
       output_word(path)
-    when path == "/start_game"
+    when path == "/start_game" #fix
+      new_game?(client)
       ps.game = true
       output_game_start
     when path == "/game" && verb == "POST"
-      game_post
+      game_post(client)
     when path == "/game" && verb == "GET"
-      number_comparison
+      number_comparison(client)
+    else
+      not_found(client)
     end
   end
 
@@ -70,14 +79,13 @@ class Output
     "<html><head></head><body>Good Luck!</body></html>"
   end
 
-  def output_game
-    "<html><head></head><body>You have taken #{ps.guess_count} guesses</body></hmtl>"
+  def run_code(client)
+    client.puts ok_code
   end
 
-  def game_post
-    server = "HTTP/1.1 303 See Other\r\n"
-    location = "Location: http://127.0.0.1:9292/game\r\n\r\n"
-     server + location
+  def not_found(client)
+    client.puts not_found_code
   end
+
 
 end

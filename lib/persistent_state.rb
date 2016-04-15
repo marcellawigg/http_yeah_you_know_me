@@ -11,6 +11,7 @@ class PersistentState
     @game = false
     @random_number = rand(0..100)
     @guess = nil
+    # @header = "HTTP/1.1" + @response_code
     @header = nil
     @response_code = "200 OK"
     @response = nil
