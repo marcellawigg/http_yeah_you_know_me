@@ -1,7 +1,7 @@
 class PersistentState
 
   attr_accessor :hello_counter, :request_counter, :close,
-  :game, :guess_count, :guess, :random_number, :header, :response_code, :response
+  :game, :guess_count, :guess, :random_number, :header, :response_code
 
   def initialize
     @hello_counter = 0
@@ -13,7 +13,6 @@ class PersistentState
     @guess = nil
     @header = nil
     @response_code = "200 OK"
-    @response = nil
   end
 
 

@@ -19,6 +19,7 @@ class Server
 
       request_lines = get_lines(client)
       @response = ResponseParser.new(request_lines)
+      require "pry"; binding.pry
       output_object = Output.new(@response, @ps)
       output = output_object.path_outputs
       # require "pry"; binding.pry
