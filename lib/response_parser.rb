@@ -7,7 +7,7 @@
 
     def string_output
       hash1 = first_three_hashes
-      hash2 = hash_without_first
+      hash2 = headers
       output_hash = hash1.merge(hash2)
 
       output_string = output_hash.map do |key,value|
@@ -17,7 +17,6 @@
 
     def first_three_hashes
       first_three = request_lines[0].split(" ")
-      host_port = request_lines[1].split(" ")[1].split(":")
 
       hash = Hash.new
       hash["Verb"] = first_three[0]
@@ -27,16 +26,22 @@
       hash
     end
 
-    def hash_without_first
+    def headers
       lines = request_lines.drop(1)
 
       lines_split = lines.map { |line| line.split(": ") }
       lines_split.to_h
     end
 
+    def header_string
+      headers.map do |key,value|
+        key + ": " + value
+      end.join("\n")
+    end
+
     def output_hash
       hash1 = first_three_hashes
-      hash2 = hash_without_first
+      hash2 = headers
       hash1.merge(hash2)
     end
 
@@ -44,5 +49,24 @@
       output_hash["Path"]
     end
 
+    def verb
+      output_hash["Verb"]
+    end
+
+    def protocol
+      output_hash["Protocol"]
+    end
+
+    def host
+      output_hash["Host"].split(":")[0]
+    end
+
+    def port
+      output_hash["Host"].split(":")[1]
+    end
+
+    def content_length
+      output_hash["Content-Length"].to_i
+    end
 
   end
