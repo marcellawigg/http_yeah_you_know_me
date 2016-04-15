@@ -22,7 +22,7 @@ class Server
       @response = ResponseParser.new(request_lines)
       output_object = Output.new(@response, @ps)
       output = output_object.path_outputs(client)
-      # @ps.header = ["http/1.1 #{@ps.response_code}",
+      @ps.header = ["http/1.1 #{@ps.response_code}",
       #   "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
       #   "server: ruby",
       #   "content-type: text/html; charset=iso-8859-1"].join("\r\n")
