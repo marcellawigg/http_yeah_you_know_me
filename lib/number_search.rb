@@ -9,18 +9,38 @@ module NumberSearch
     end
   end
 
-  def number_comparison
+  def number_comparison(client)
+    client.puts ok_code
     if check_class
       if ps.guess > ps.random_number
-        "Guess: #{ps.guess}\nYour guess was too high."
+        client.puts "Guess: #{ps.guess}\nYour guess was too high. You've taken #{ps.guess_count} guesses."
       elsif ps.guess < ps.random_number
-        "Guess: #{ps.guess}\nYour guess was too low."
+        client.puts "Guess: #{ps.guess}\nYour guess was too low. You've taken #{ps.guess_count} guesses."
       else
-        "Guess: #{ps.guess}\nYour guess was correct! ZAYM!!!"
+        client.puts "Guess: #{ps.guess}\nYour guess was correct! ZAYM!!! You got it right in #{ps.guess_count} guesses"
       end
     else
-      "Invalid input."
+      client.puts "Invalid input."
     end
   end
 
+  def new_game?(client)
+    if @game
+      client.puts forbidden_code(client)
+    else
+      client.puts run_code(client)
+    end
+  end
+
+
+  def game_post(client)
+    server = "HTTP/1.1 302 Move Temporarily\r\n"
+    location = "Location: http://127.0.0.1:9292/game\r\n"
+    client.puts server + location
+  end
+
+
+  # def post_header(client)
+  #   client.puts ps.header_string
+  # end
 end

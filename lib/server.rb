@@ -6,6 +6,7 @@ require './lib/persistent_state'
 
 class Server
   attr_accessor :server
+  attr_reader :client
 
   def initialize
     @ps = PersistentState.new
@@ -15,14 +16,13 @@ class Server
   def start
     puts "Ready for a request"
     loop do
-      client = server.accept
+      @client = server.accept
 
       request_lines = get_lines(client)
       @response = ResponseParser.new(request_lines)
       require "pry"; binding.pry
       output_object = Output.new(@response, @ps)
-      output = output_object.path_outputs
-      # require "pry"; binding.pry
+      output = output_object.path_outputs(client)
       # @ps.header = ["http/1.1 #{@ps.response_code}",
       #   "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
       #   "server: ruby",
