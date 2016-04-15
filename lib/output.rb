@@ -23,30 +23,30 @@ class Output
     ps.request_counter += 1
     case
     when path == "/"
-      run_code(client)
-      output_root
+      # run_code(client)
+      ps.body = output_root
     when path == "/hello"
       ps.hello_counter += 1
-      run_code(client)
-      output_hello
+      # run_code(client)
+      ps.body = output_hello
     when path == "/datetime"
-      run_code(client)
-      output_datetime
+      # run_code(client)
+      ps.body = output_datetime
     when path == "/shutdown"
-      run_code(client)
+      # run_code(client)
       ps.close = true
-      output_shutdown
+      ps.body = output_shutdown
     when path.include?("word_search")
-      run_code(client)
-      output_word(path)
+      # run_code(client)
+      ps.body = output_word(path)
     when path == "/start_game" #fix
       new_game?(client)
       ps.game = true
-      output_game_start
+      ps.body = output_game_start
     when path == "/game" && verb == "POST"
-      game_post(client)
+      ps.body = game_post(client)
     when path == "/game" && verb == "GET"
-      number_comparison(client)
+      ps.body = number_comparison
     else
       not_found(client)
     end
@@ -79,9 +79,9 @@ class Output
     "<html><head></head><body>Good Luck!</body></html>"
   end
 
-  def run_code(client)
-    client.puts ok_code
-  end
+  # def run_code(client)
+  #   client.puts ok_code
+  # end
 
   def not_found(client)
     client.puts not_found_code

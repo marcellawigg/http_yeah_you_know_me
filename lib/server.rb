@@ -20,19 +20,18 @@ class Server
 
       request_lines = get_lines(client)
       @response = ResponseParser.new(request_lines)
-      require "pry"; binding.pry
       output_object = Output.new(@response, @ps)
-      output = output_object.path_outputs(client)
-      # @ps.header = ["http/1.1 #{@ps.response_code}",
-      #   "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-      #   "server: ruby",
-      #   "content-type: text/html; charset=iso-8859-1"].join("\r\n")
+      client.puts @ps.header
+      output_object.path_outputs(client)
+      @ps.header = ["http/1.1 #{@ps.response_code}",
+        "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+        "server: ruby",
+        "content-type: text/html; charset=iso-8859-1"].join("\r\n")
 
       @ps.guess = client.read(@response.content_length).to_i
+  
 
-      client.puts @ps.header
-      client.puts output
-
+      client.puts @ps.body
       client.close
       break if @ps.close
 
